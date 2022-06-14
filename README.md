@@ -1,1 +1,2 @@
-# Pandas and Numpy tasks
+# Pandas, Numpy, SQL tasks
+ and 
