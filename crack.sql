@@ -99,3 +99,19 @@ AND fc.category_id = c.category_id
 GROUP BY c.name
 ORDER BY hours DESC
 LIMIT 1;
+-- 5 CTE
+WITH child_act1 AS (
+SELECT fa.actor_id, COUNT(*) cnt
+FROM film f, film_category fc, category c, film_actor fa
+WHERE fc.category_id = c.category_id
+AND fc.film_id = f.film_id
+AND fa.film_id = f.film_id
+AND c.name = 'Children'
+GROUP BY fa.actor_id), child_act_dns1 AS (
+SELECT actor_id, cnt, DENSE_RANK() OVER(ORDER BY cnt DESC) dns
+FROM child_act1)
+
+SELECT a.actor_id, a.first_name, a.last_name, cnt FROM child_act_dns1
+INNER JOIN actor as a USING (actor_id)
+WHERE dns < 4
+ORDER BY cnt DESC;
